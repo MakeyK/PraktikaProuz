@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {User, UserStorage} = require('../models/model')
 const sequelize = require('../database');
-const fs = require('fs')
 
 const generateJwt = (id_client, FIO, login, number_phone) => 
 {
@@ -27,7 +26,7 @@ class AuthController
         return next(ApiError.badRequest('Пользователь с таким login уже существует'))
       }
       const user = await User.create({FIO, login, number_phone})
-      const token = generateJwt(user.id_user, user.nickname, user.email, user.role)
+      const token = generateJwt(user.id_client, user.FIO, user.login, user.number_phone)
       return res.json({token})
     } catch (error) {
         console.log(error)
@@ -39,29 +38,13 @@ class AuthController
   async login(req, res, next)
   {
     try {
-      const {email, password} = req.body
-      if (!email)
-      {
-        return next(ApiError.badRequest('Некорректный email'))
-      }
-      if (!password)
-      {
-        return next(ApiError.badRequest('Некорректный пароль'))
-      }
-      const user = await User.findOne({where: {email}})
+      const {login} = req.body
+      const user = await User.findOne({where: {login}})
       if (!user)
       {
         return next(ApiError.internal('Пользователь не найден'))
       }
-      let comparePassword = bcrypt.compareSync(password, user.password)
-      if (!comparePassword)
-      {
-        return next(ApiError.internal('Указан неверный пароль'))
-      }
-      const token = generateJwt(user.id_user, user.nickname, user.email, user.role)
-      res.cookie('token', token, {
-        httpOnly: true
-      })
+      const token = generateJwt(user.id_client, user.FIO, user.login, user.number_phone)
       return res.json({token})
     } catch (error) {
         console.log(error)
