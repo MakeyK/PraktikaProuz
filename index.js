@@ -3,6 +3,7 @@ require('dotenv').config()
 const router = require('./routers/index')
 const {QueryTypes} = require('sequelize')
 const sequelize = require('./db')
+const models = require('./models/model')
 const CryptoJS = require('crypto-js')
 
 const PORT = 3000
@@ -12,7 +13,7 @@ const cors = require('cors')
 app.use(cors())
 app.use(express.json())
 
-// app.use('/mak', router)
+app.use('/mak', router)
 
 
 const start = async () =>

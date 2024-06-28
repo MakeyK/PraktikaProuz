@@ -1,9 +1,7 @@
 const Router = require('express')
 const router = new Router()
-// const AuthRouter = require('./AuthRouter')
-// const DBRouter = require('./DBRouter')
+const DBRouter = require('./Routers')
 
-// router.use('/auth', AuthRouter)
-// router.use('/auto', DBRouter)
+router.use('/db', DBRouter)
 
 module.exports=router
