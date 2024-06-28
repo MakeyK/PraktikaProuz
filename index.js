@@ -1,6 +1,7 @@
 const express = require('express')
 require('dotenv').config()
 const router = require('./routers/index')
+const models = require('./models/model')
 const {QueryTypes} = require('sequelize')
 const sequelize = require('./db')
 const CryptoJS = require('crypto-js')

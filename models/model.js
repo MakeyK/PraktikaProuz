@@ -49,29 +49,36 @@ const Staff = sequelize.define('staff', {
 })
 
 const Produkt_Menu = sequelize.define('produkt_menu', {
-    id_produkt: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    id_bluda: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
 })
 
 const Order_Menu = sequelize.define('order_menu', {
-    id_order: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    id_bluda: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+    
 })
+//Продукт_Блюда
+{   
+    Prodykt.hasOne(Produkt_Menu)
+    Produkt_Menu.belongsTo(Prodykt)
 
-Prodykt.hasMany(Menu, Provider)
-Provider.belongsTo(Prodykt)
-Menu.belongsTo(Prodykt)
-Orders.belongsTo(Menu)
-Menu.hasMany(Orders, Staff)
-Staff.belongsTo(Menu)
-Orders.hasMany(Clients)
-Clients.belongsTo(Orders)
-Prodykt.belongsTo(Produkt_Menu)
-Menu.belongsTo(Produkt_Menu)
-Produkt_Menu.hasMany(Menu, Prodykt)
-Orders.belongsTo(Order_Menu)
-Menu.belongsTo(Order_Menu)
-Order_Menu.hasMany(Menu, Orders)
+    Menu.hasMany(Produkt_Menu)
+    Produkt_Menu.belongsTo(Menu)
+}
+//Заказ_Блюда
+{
+    Menu.hasMany(Order_Menu)
+    Order_Menu.belongsTo(Menu)
+
+    Orders.hasMany(Order_Menu)
+    Order_Menu.belongsTo(Orders)
+}
+
+Clients.hasMany(Orders)
+Orders.belongsTo(Clients)
+
+Provider.hasMany(Prodykt)
+Prodykt.belongsTo(Provider)
+
+Staff.hasMany(Menu)
+Menu.belongsTo(Staff)
 
 
 module.exports = {
